@@ -1,0 +1,88 @@
+{
+  "name": "hbl-payment-gateway",
+  "version": "0.1.0",
+  "description": "TypeScript client for the HBL Internet Payment Gateway (Mastercard Payment Gateway Services). Hosted Checkout, result verification, capture, refund and void — zero dependencies, works in Node, Next.js and edge runtimes.",
+  "keywords": [
+    "hbl",
+    "hbl-pay",
+    "habib-bank",
+    "payment-gateway",
+    "mastercard",
+    "mpgs",
+    "hosted-checkout",
+    "pakistan",
+    "payments",
+    "pkr",
+    "typescript"
+  ],
+  "license": "MIT",
+  "author": "Saurav Gami",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Saurabgami977/hbl-payment-gateway.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Saurabgami977/hbl-payment-gateway/issues"
+  },
+  "homepage": "https://github.com/Saurabgami977/hbl-payment-gateway#readme",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "import": "./dist/react/index.js",
+      "require": "./dist/react/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "type-check": "tsc --noEmit",
+    "prepublishOnly": "npm run type-check && npm run test && npm run build"
+  },
+  "peerDependencies": {
+    "react": ">=17"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.1.0",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@vitest/coverage-v8": "^2.1.8",
+    "jsdom": "^25.0.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/Saurabgami977/hbl-payment-gateway/security/advisories/new
+    about: Report security issues privately, never as a public issue.
+  - name: HBL merchant support
+    url: https://www.hbl.com
+    about: Questions about your merchant account, credentials or settlement belong with HBL, not this package.
