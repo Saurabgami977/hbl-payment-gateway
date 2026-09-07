@@ -12,8 +12,8 @@ import { SessionsResource } from './resources/sessions.js';
 import { TransactionsResource } from './resources/transactions.js';
 
 /**
- * Client for the HBL Internet Payment Gateway (Mastercard Payment Gateway
- * Services v100).
+ * Client for the Himalayan Bank Limited (HBL Nepal) payment gateway, which
+ * runs on Mastercard Payment Gateway Services (MPGS) v100.
  *
  * @example
  * import { HblGateway } from 'hbl-payment-gateway';
@@ -27,7 +27,7 @@ import { TransactionsResource } from './resources/transactions.js';
  * const session = await hbl.checkout.initiate({
  *   orderId: 'ord_1024',
  *   amount: 1500,
- *   currency: 'PKR',
+ *   currency: 'NPR',
  *   returnUrl: 'https://acme.example/checkout/result',
  * });
  */

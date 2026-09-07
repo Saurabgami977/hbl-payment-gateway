@@ -4,5 +4,5 @@ contact_links:
     url: https://github.com/Saurabgami977/hbl-payment-gateway/security/advisories/new
     about: Report security issues privately, never as a public issue.
   - name: HBL merchant support
-    url: https://www.hbl.com
+    url: https://www.himalayanbank.com
     about: Questions about your merchant account, credentials or settlement belong with HBL, not this package.

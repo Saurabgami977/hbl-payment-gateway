@@ -30,7 +30,7 @@ export interface HblCheckoutSession {
   sessionId: string;
   /**
    * Gateway hostname. Ignored when `checkoutJsUrl` is given.
-   * @default 'hbl.gateway.mastercard.com'
+   * @default 'ap-gateway.mastercard.com'
    */
   host?: string;
   /** Full script URL, as returned by `checkout.initiate()`. */
@@ -69,7 +69,7 @@ export interface UseHblCheckoutResult {
   showEmbeddedPage: (selector: string) => Promise<void>;
 }
 
-const DEFAULT_HOST = 'hbl.gateway.mastercard.com';
+const DEFAULT_HOST = 'ap-gateway.mastercard.com';
 const SCRIPT_ID = 'hbl-checkout-script';
 
 /** Resolves once `window.Checkout` is available; shared across all callers. */

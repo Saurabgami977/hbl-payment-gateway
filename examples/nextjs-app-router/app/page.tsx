@@ -36,7 +36,7 @@ export default function Home() {
   return (
     <main style={{ maxWidth: 480, margin: '4rem auto', fontFamily: 'system-ui' }}>
       <h1>Example Store</h1>
-      <p>Starter plan — PKR 1,500.00</p>
+      <p>Starter plan — NPR 1,500.00</p>
 
       {session ? (
         <button onClick={() => checkout.showPaymentPage()} disabled={checkout.loading}>

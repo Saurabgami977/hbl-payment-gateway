@@ -74,7 +74,7 @@ export interface InitiateCheckoutParams {
   orderId: string;
   /** Accepts a number or string; validated against the currency's minor unit. */
   amount: number | string;
-  /** ISO 4217 code, e.g. `PKR`. */
+  /** ISO 4217 code, e.g. `NPR`. */
   currency: string;
   /** Shown to the customer on the hosted page and on their statement. */
   description?: string;

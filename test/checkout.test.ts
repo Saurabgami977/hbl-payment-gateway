@@ -16,13 +16,13 @@ describe('checkout.initiate', () => {
     const result = await hbl.checkout.initiate({
       orderId: 'ord_1024',
       amount: 1500,
-      currency: 'pkr',
+      currency: 'npr',
       description: 'Starter plan',
       returnUrl: 'https://acme.example/result',
     });
 
     expect(calls[0]!.url).toBe(
-      'https://hbl.gateway.mastercard.com/api/rest/version/100/merchant/TESTMERCHANT/session'
+      'https://ap-gateway.mastercard.com/api/rest/version/100/merchant/TESTMERCHANT/session'
     );
     expect(calls[0]!.method).toBe('POST');
     expect(calls[0]!.body).toMatchObject({
@@ -33,7 +33,7 @@ describe('checkout.initiate', () => {
         returnUrl: 'https://acme.example/result',
         merchant: { name: 'Test Store' },
       },
-      order: { id: 'ord_1024', amount: '1500.00', currency: 'PKR', description: 'Starter plan' },
+      order: { id: 'ord_1024', amount: '1500.00', currency: 'NPR', description: 'Starter plan' },
     });
 
     expect(result.sessionId).toBe('SESSION0002899999999999999999');
@@ -47,7 +47,7 @@ describe('checkout.initiate', () => {
     await hbl.checkout.initiate({
       orderId: 'ord_1024',
       amount: 1,
-      currency: 'PKR',
+      currency: 'NPR',
       returnUrl: 'https://acme.example/result',
     });
     const auth = calls[0]!.headers.Authorization;
@@ -63,7 +63,7 @@ describe('checkout.initiate', () => {
     await hbl.checkout.initiate({
       orderId: 'ord_1024',
       amount: 1500,
-      currency: 'PKR',
+      currency: 'NPR',
       returnUrl: 'https://acme.example/result',
       operation: 'AUTHORIZE',
       cancelUrl: 'https://acme.example/cart',
@@ -91,7 +91,7 @@ describe('checkout.initiate', () => {
       hbl.checkout.initiate({
         orderId: 'ord_1024',
         amount: 1500,
-        currency: 'PKR',
+        currency: 'NPR',
         returnUrl: 'https://acme.example/result',
       })
     ).rejects.toMatchObject({
@@ -116,7 +116,7 @@ describe('checkout.initiate', () => {
       .initiate({
         orderId: 'ord_1024',
         amount: 1500,
-        currency: 'PKR',
+        currency: 'NPR',
         returnUrl: 'https://acme.example/result',
       })
       .catch((e) => e);
@@ -133,7 +133,7 @@ describe('checkout.initiate', () => {
     });
     const hbl = createGateway(fetchStub as unknown as typeof fetch);
     const error = await hbl.checkout
-      .initiate({ orderId: 'o', amount: 1, currency: 'PKR', returnUrl: 'https://a.example' })
+      .initiate({ orderId: 'o', amount: 1, currency: 'NPR', returnUrl: 'https://a.example' })
       .catch((e) => e);
     expect(error.isRetryable).toBe(true);
   });
@@ -145,7 +145,7 @@ describe('checkout.initiate', () => {
     });
     const hbl = createGateway(fetchStub as unknown as typeof fetch);
     const error = await hbl.checkout
-      .initiate({ orderId: 'o', amount: 1, currency: 'PKR', returnUrl: 'https://a.example' })
+      .initiate({ orderId: 'o', amount: 1, currency: 'NPR', returnUrl: 'https://a.example' })
       .catch((e) => e);
     expect(error).toBeInstanceOf(HblApiError);
     expect(error.httpStatus).toBe(401);
@@ -155,14 +155,14 @@ describe('checkout.initiate', () => {
     const { fetchStub } = createFetchStub({ status: 200, text: '<html>Gateway timeout</html>' });
     const hbl = createGateway(fetchStub as unknown as typeof fetch);
     await expect(
-      hbl.checkout.initiate({ orderId: 'o', amount: 1, currency: 'PKR', returnUrl: 'https://a.example' })
+      hbl.checkout.initiate({ orderId: 'o', amount: 1, currency: 'NPR', returnUrl: 'https://a.example' })
     ).rejects.toThrow(/non-JSON response/);
   });
 
   it('wraps transport failures in HblNetworkError', async () => {
     const hbl = createGateway(createFailingFetch() as unknown as typeof fetch);
     await expect(
-      hbl.checkout.initiate({ orderId: 'o', amount: 1, currency: 'PKR', returnUrl: 'https://a.example' })
+      hbl.checkout.initiate({ orderId: 'o', amount: 1, currency: 'NPR', returnUrl: 'https://a.example' })
     ).rejects.toBeInstanceOf(HblNetworkError);
   });
 
@@ -171,13 +171,13 @@ describe('checkout.initiate', () => {
     const hbl = createGateway(fetchStub as unknown as typeof fetch);
 
     await expect(
-      hbl.checkout.initiate({ orderId: '', amount: 1, currency: 'PKR', returnUrl: 'https://a.example' })
+      hbl.checkout.initiate({ orderId: '', amount: 1, currency: 'NPR', returnUrl: 'https://a.example' })
     ).rejects.toBeInstanceOf(HblConfigError);
     await expect(
-      hbl.checkout.initiate({ orderId: 'o', amount: 1, currency: 'PKR', returnUrl: '' })
+      hbl.checkout.initiate({ orderId: 'o', amount: 1, currency: 'NPR', returnUrl: '' })
     ).rejects.toBeInstanceOf(HblConfigError);
     await expect(
-      hbl.checkout.initiate({ orderId: 'o', amount: -1, currency: 'PKR', returnUrl: 'https://a.example' })
+      hbl.checkout.initiate({ orderId: 'o', amount: -1, currency: 'NPR', returnUrl: 'https://a.example' })
     ).rejects.toBeInstanceOf(HblConfigError);
 
     expect(fetchStub).not.toHaveBeenCalled();
@@ -191,7 +191,7 @@ describe('checkout.initiate', () => {
     await hbl.checkout.initiate({
       orderId: 'o',
       amount: 1,
-      currency: 'PKR',
+      currency: 'NPR',
       returnUrl: 'https://a.example',
     });
 
@@ -214,7 +214,7 @@ describe('checkout.verify', () => {
       successIndicator: validIndicator,
     });
 
-    expect(result).toMatchObject({ paid: true, status: 'CAPTURED', currency: 'PKR' });
+    expect(result).toMatchObject({ paid: true, status: 'CAPTURED', currency: 'NPR' });
     expect(calls[0]!.method).toBe('GET');
     expect(calls[0]!.url).toContain('/order/ord_1024');
   });
@@ -275,7 +275,7 @@ describe('checkout.verify', () => {
         resultIndicator: validIndicator,
         successIndicator: validIndicator,
         expectedAmount: 9999,
-        expectedCurrency: 'PKR',
+        expectedCurrency: 'NPR',
       })
       .catch((e) => e);
 
@@ -309,7 +309,7 @@ describe('checkout.verify', () => {
         resultIndicator: validIndicator,
         successIndicator: validIndicator,
         expectedAmount: 1500,
-        expectedCurrency: 'PKR',
+        expectedCurrency: 'NPR',
       })
     ).resolves.toMatchObject({ paid: true });
   });

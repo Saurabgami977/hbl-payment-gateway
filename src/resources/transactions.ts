@@ -31,7 +31,7 @@ export class TransactionsResource {
    * @example
    * await hbl.transactions.capture('ord_1024', {
    *   amount: 1500,
-   *   currency: 'PKR',
+   *   currency: 'NPR',
    *   transactionId: 'capture-ord_1024-1', // stable, so a retry is safe
    * });
    */
@@ -43,7 +43,7 @@ export class TransactionsResource {
    * Refunds a captured payment, in full or in part (`REFUND`).
    *
    * @example
-   * await hbl.transactions.refund('ord_1024', { amount: 500, currency: 'PKR' });
+   * await hbl.transactions.refund('ord_1024', { amount: 500, currency: 'NPR' });
    */
   async refund(orderId: string, params: HblAmountOperationParams): Promise<HblTransaction> {
     return this.amountOperation('REFUND', 'Refunding the payment', orderId, params);

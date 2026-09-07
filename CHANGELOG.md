@@ -13,7 +13,8 @@ Initial release.
 
 ### Added
 
-- `HblGateway` client for HBL's Internet Payment Gateway (MPGS v100), with
+- `HblGateway` client for the Himalayan Bank Limited (HBL Nepal) payment
+  gateway, which runs on MPGS v100, with
   `checkout`, `orders`, `transactions` and `sessions` resources.
 - `checkout.initiate()` for hosted checkout sessions, supporting `PURCHASE`,
   `AUTHORIZE` and `VERIFY` operations.

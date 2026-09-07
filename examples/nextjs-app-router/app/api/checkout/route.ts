@@ -5,7 +5,7 @@ import { createOrder, updateOrder } from '@/lib/orders';
 
 export async function POST() {
   // Your real app would look up an existing cart or order here.
-  const order = createOrder(1500, 'PKR');
+  const order = createOrder(1500, 'NPR');
 
   try {
     const session = await hbl.checkout.initiate({

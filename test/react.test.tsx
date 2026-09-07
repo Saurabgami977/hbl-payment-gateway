@@ -30,7 +30,7 @@ function stubScriptLoading(options: { succeed?: boolean } = {}) {
           }
         });
       },
-      get: () => 'https://hbl.gateway.mastercard.com/static/checkout/checkout.min.js',
+      get: () => 'https://ap-gateway.mastercard.com/static/checkout/checkout.min.js',
       configurable: true,
     });
     return script;

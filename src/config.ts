@@ -1,7 +1,12 @@
 import { HblConfigError } from './errors.js';
 
-/** Hostname of HBL's production gateway, used when `host` is omitted. */
-export const DEFAULT_HBL_HOST = 'hbl.gateway.mastercard.com';
+/**
+ * MPGS's Asia-Pacific gateway, which is what Himalayan Bank merchants are
+ * provisioned on. Used when `host` is omitted. Confirm your host with HBL —
+ * some merchants are issued a different one, and a merchant provisioned on one
+ * MPGS host will not authenticate against another.
+ */
+export const DEFAULT_HBL_HOST = 'ap-gateway.mastercard.com';
 
 /** MPGS API version this package targets. */
 export const DEFAULT_API_VERSION = 100;
@@ -31,7 +36,7 @@ export interface HblConfig {
   apiPassword: string;
   /**
    * Gateway hostname, with or without a scheme.
-   * @default 'hbl.gateway.mastercard.com'
+   * @default 'ap-gateway.mastercard.com'
    */
   host?: string;
   /** @default 100 */

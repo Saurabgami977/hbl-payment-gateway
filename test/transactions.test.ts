@@ -5,7 +5,7 @@ import { HblApiError, HblConfigError } from '../src/errors.js';
 const captureSuccess = {
   result: 'SUCCESS',
   response: { gatewayCode: 'APPROVED' },
-  transaction: { id: 'capture-1', type: 'CAPTURE', amount: 1500, currency: 'PKR' },
+  transaction: { id: 'capture-1', type: 'CAPTURE', amount: 1500, currency: 'NPR' },
   order: capturedOrder,
 };
 
@@ -16,7 +16,7 @@ describe('transactions.capture', () => {
 
     await hbl.transactions.capture('ord_1024', {
       amount: 1500,
-      currency: 'PKR',
+      currency: 'NPR',
       transactionId: 'capture-1',
     });
 
@@ -24,7 +24,7 @@ describe('transactions.capture', () => {
     expect(calls[0]!.url).toContain('/order/ord_1024/transaction/capture-1');
     expect(calls[0]!.body).toEqual({
       apiOperation: 'CAPTURE',
-      transaction: { amount: '1500.00', currency: 'PKR' },
+      transaction: { amount: '1500.00', currency: 'NPR' },
     });
   });
 
@@ -32,7 +32,7 @@ describe('transactions.capture', () => {
     const { fetchStub, calls } = createFetchStub({ body: captureSuccess });
     const hbl = createGateway(fetchStub as unknown as typeof fetch);
 
-    await hbl.transactions.capture('ord_1024', { amount: 1500, currency: 'PKR' });
+    await hbl.transactions.capture('ord_1024', { amount: 1500, currency: 'NPR' });
 
     const generated = calls[0]!.url.split('/transaction/')[1]!;
     expect(generated).toMatch(/^[0-9a-f]{20,}$/);
@@ -46,7 +46,7 @@ describe('transactions.capture', () => {
     const hbl = createGateway(fetchStub as unknown as typeof fetch);
 
     await expect(
-      hbl.transactions.capture('ord_1024', { amount: 1500, currency: 'PKR' })
+      hbl.transactions.capture('ord_1024', { amount: 1500, currency: 'NPR' })
     ).rejects.toBeInstanceOf(HblApiError);
   });
 });
@@ -60,13 +60,13 @@ describe('transactions.refund', () => {
 
     await hbl.transactions.refund('ord_1024', {
       amount: '500',
-      currency: 'PKR',
+      currency: 'NPR',
       transactionId: 'refund-1',
     });
 
     expect(calls[0]!.body).toEqual({
       apiOperation: 'REFUND',
-      transaction: { amount: '500.00', currency: 'PKR' },
+      transaction: { amount: '500.00', currency: 'NPR' },
     });
   });
 });

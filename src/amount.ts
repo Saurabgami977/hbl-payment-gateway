@@ -3,8 +3,9 @@ import { HblConfigError } from './errors.js';
 /**
  * Currencies whose minor unit is not two decimal places.
  *
- * Anything absent from this table is treated as two, which covers PKR, USD,
- * GBP, EUR, AED, SAR and essentially every currency an HBL merchant bills in.
+ * Anything absent from this table is treated as two, which covers NPR, USD,
+ * AUD, EUR and GBP — every currency a Himalayan Bank merchant is likely to
+ * bill in.
  */
 const MINOR_UNIT_OVERRIDES: Record<string, number> = {
   BIF: 0, CLP: 0, DJF: 0, GNF: 0, ISK: 0, JPY: 0, KMF: 0, KRW: 0,
@@ -25,7 +26,7 @@ export function minorUnits(currency: string): number {
 export function normalizeCurrency(currency: string): string {
   if (typeof currency !== 'string' || !/^[A-Za-z]{3}$/.test(currency.trim())) {
     throw new HblConfigError(
-      `Invalid currency ${JSON.stringify(currency)}: expected a three-letter ISO 4217 code such as "PKR".`,
+      `Invalid currency ${JSON.stringify(currency)}: expected a three-letter ISO 4217 code such as "NPR".`,
       'currency'
     );
   }
@@ -37,14 +38,14 @@ export function normalizeCurrency(currency: string): string {
  *
  * Floating-point noise from arithmetic like `19.99 * 3` is absorbed, but a
  * genuinely over-precise amount — one that would have to be rounded to fit the
- * currency, such as `1.005` in PKR — is rejected. Silently rounding a customer
+ * currency, such as `1.005` in NPR — is rejected. Silently rounding a customer
  * charge is not this package's decision to make.
  *
  * @example
- * normalizeAmount(19.99 * 3, 'PKR')  // "59.97"
- * normalizeAmount('1500', 'PKR')     // "1500.00"
+ * normalizeAmount(19.99 * 3, 'NPR')  // "59.97"
+ * normalizeAmount('1500', 'NPR')     // "1500.00"
  * normalizeAmount(1500, 'JPY')       // "1500"
- * normalizeAmount(1.005, 'PKR')      // throws HblConfigError
+ * normalizeAmount(1.005, 'NPR')      // throws HblConfigError
  *
  * @throws {HblConfigError} on NaN, Infinity, negative or over-precise amounts.
  */

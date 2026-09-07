@@ -9,7 +9,7 @@ describe('resolveConfig', () => {
   it('builds the MPGS base URL and Basic auth header', () => {
     const config = resolveConfig(base);
     expect(config.baseUrl).toBe(
-      'https://hbl.gateway.mastercard.com/api/rest/version/100/merchant/TESTMERCHANT'
+      'https://ap-gateway.mastercard.com/api/rest/version/100/merchant/TESTMERCHANT'
     );
     // MPGS expects the username to be `merchant.<merchantId>`.
     const decoded = Buffer.from(config.authHeader.replace('Basic ', ''), 'base64').toString();
@@ -27,7 +27,7 @@ describe('resolveConfig', () => {
 
   it('exposes the checkout script URL for the browser', () => {
     expect(resolveConfig(base).checkoutJsUrl).toBe(
-      'https://hbl.gateway.mastercard.com/static/checkout/checkout.min.js'
+      'https://ap-gateway.mastercard.com/static/checkout/checkout.min.js'
     );
   });
 
@@ -82,7 +82,7 @@ describe('HblGateway', () => {
   it('exposes only browser-safe values as getters', () => {
     const gateway = new HblGateway(base);
     expect(gateway.merchantId).toBe('TESTMERCHANT');
-    expect(gateway.host).toBe('hbl.gateway.mastercard.com');
+    expect(gateway.host).toBe('ap-gateway.mastercard.com');
     expect(gateway.checkoutJsUrl).toContain('/static/checkout/checkout.min.js');
   });
 

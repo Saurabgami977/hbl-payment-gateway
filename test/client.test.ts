@@ -21,7 +21,7 @@ describe('retries', () => {
     const hbl = createGateway(failing as unknown as typeof fetch, { maxRetries: 3 });
 
     await expect(
-      hbl.transactions.capture('ord_1024', { amount: 1, currency: 'PKR' })
+      hbl.transactions.capture('ord_1024', { amount: 1, currency: 'NPR' })
     ).rejects.toBeInstanceOf(HblNetworkError);
     expect(failing).toHaveBeenCalledTimes(1);
   });

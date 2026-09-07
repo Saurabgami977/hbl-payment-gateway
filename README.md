@@ -5,9 +5,9 @@
 [![license](https://img.shields.io/npm/l/hbl-payment-gateway.svg)](./LICENSE)
 [![types](https://img.shields.io/npm/types/hbl-payment-gateway.svg)](https://www.npmjs.com/package/hbl-payment-gateway)
 
-TypeScript client for the **HBL Internet Payment Gateway** — Habib Bank Limited's online card processing, which runs on Mastercard Payment Gateway Services (MPGS) v100.
+TypeScript client for the **Himalayan Bank Limited (HBL Nepal)** payment gateway, which runs on Mastercard Payment Gateway Services (MPGS) v100.
 
-Accept card payments in Pakistan without hand-rolling the REST calls, and without the two mistakes that cost merchants real money: trusting the redirect URL, and mis-reading a declined payment as a successful one.
+Accept card payments in Nepal without hand-rolling the REST calls, and without the two mistakes that cost merchants real money: trusting the redirect URL, and mis-reading a declined payment as a successful one.
 
 ```bash
 npm install hbl-payment-gateway
@@ -44,7 +44,7 @@ npm install hbl-payment-gateway
 
 ## Why this package
 
-HBL gives you a merchant ID, an API password, and a link to Mastercard's generic gateway documentation. What it does not give you is a client library, so every merchant writes the same integration from scratch — and tends to get the same three things wrong.
+Himalayan Bank gives you a merchant ID, an API password, and a link to Mastercard's generic gateway documentation. What it does not give you is a client library, so every merchant writes the same integration from scratch — and tends to get the same three things wrong.
 
 **The gateway returns HTTP 200 for failures.** A declined card comes back as `200 OK` with `{"result": "FAILURE"}` in the body. Code that checks `if (response.ok)` treats that as a paid order. This package checks the payload, not the status line, on every operation that moves money.
 
@@ -69,7 +69,7 @@ const hbl = new HblGateway({
 const session = await hbl.checkout.initiate({
   orderId: 'ord_1024',
   amount: 1500,
-  currency: 'PKR',
+  currency: 'NPR',
   description: 'Starter plan — 1 month',
   returnUrl: 'https://acme.example/checkout/result',
 });
@@ -87,7 +87,7 @@ const result = await hbl.checkout.verify({
   resultIndicator: url.searchParams.get('resultIndicator'),
   successIndicator: order.gatewaySuccessIndicator,
   expectedAmount: 1500,
-  expectedCurrency: 'PKR',
+  expectedCurrency: 'NPR',
 });
 
 console.log(result.status); // 'CAPTURED'
@@ -108,7 +108,7 @@ const hbl = HblGateway.fromEnv();
 new HblGateway({
   merchantId: 'YOUR_MERCHANT_ID',   // required
   apiPassword: 'YOUR_API_PASSWORD', // required
-  host: 'hbl.gateway.mastercard.com',
+  host: 'ap-gateway.mastercard.com',
   apiVersion: 100,
   merchantName: 'Acme Store',
   timeoutMs: 30_000,
@@ -123,7 +123,7 @@ new HblGateway({
 |---|---|---|
 | `merchantId` | — | Sent as the Basic auth username `merchant.<merchantId>`. |
 | `apiPassword` | — | Never logged, never serialised, never sent to the browser. |
-| `host` | `hbl.gateway.mastercard.com` | Use the test host HBL gives you during integration. A pasted `https://` prefix or trailing slash is stripped for you. |
+| `host` | `ap-gateway.mastercard.com` | MPGS's Asia-Pacific gateway, which is what Himalayan Bank merchants are provisioned on. Confirm yours with HBL, and use the test host they give you during integration. A pasted `https://` prefix or trailing slash is stripped for you. |
 | `apiVersion` | `100` | MPGS REST version. |
 | `merchantName` | — | Business name shown to the customer on the hosted page. |
 | `timeoutMs` | `30000` | Per attempt, enforced with `AbortSignal`. |
@@ -136,7 +136,7 @@ new HblGateway({
 ```bash
 HBL_MERCHANT_ID=your_merchant_id
 HBL_API_PASSWORD=your_api_password
-HBL_GATEWAY_HOST=hbl.gateway.mastercard.com   # optional
+HBL_GATEWAY_HOST=ap-gateway.mastercard.com   # optional
 HBL_MERCHANT_NAME=Your Business Name          # optional
 ```
 
@@ -333,7 +333,7 @@ Use `operation: 'AUTHORIZE'` when you want to place a hold and take the money la
 await hbl.checkout.initiate({
   orderId: 'ord_1024',
   amount: 1500,
-  currency: 'PKR',
+  currency: 'NPR',
   returnUrl: 'https://acme.example/checkout/result',
   operation: 'AUTHORIZE',
 });
@@ -341,7 +341,7 @@ await hbl.checkout.initiate({
 // 2. Capture when the goods ship.
 await hbl.transactions.capture('ord_1024', {
   amount: 1500,
-  currency: 'PKR',
+  currency: 'NPR',
   transactionId: 'capture-ord_1024-1',
 });
 
@@ -351,7 +351,7 @@ await hbl.transactions.void('ord_1024', { targetTransactionId: 'auth-1' });
 // 4. Refund a captured payment, in full or in part.
 await hbl.transactions.refund('ord_1024', {
   amount: 500,
-  currency: 'PKR',
+  currency: 'NPR',
   transactionId: 'refund-ord_1024-1',
 });
 ```
@@ -393,7 +393,7 @@ import {
 } from 'hbl-payment-gateway';
 
 try {
-  await hbl.transactions.capture(orderId, { amount, currency: 'PKR' });
+  await hbl.transactions.capture(orderId, { amount, currency: 'NPR' });
 } catch (error) {
   if (error instanceof HblDeclineError) {
     // Customer-safe wording, deliberately vague about why.
@@ -421,14 +421,14 @@ try {
 Pass a number or a string; both are validated against the currency's minor unit and converted to the decimal string MPGS expects.
 
 ```ts
-normalizeAmount(1500, 'PKR')        // '1500.00'
-normalizeAmount('1500.5', 'PKR')    // '1500.50'
-normalizeAmount(19.99 * 3, 'PKR')   // '59.97'  — float drift absorbed
+normalizeAmount(1500, 'NPR')        // '1500.00'
+normalizeAmount('1500.5', 'NPR')    // '1500.50'
+normalizeAmount(19.99 * 3, 'NPR')   // '59.97'  — float drift absorbed
 normalizeAmount(1500, 'JPY')        // '1500'   — zero-decimal currency
-normalizeAmount(1.005, 'PKR')       // throws HblConfigError
+normalizeAmount(1.005, 'NPR')       // throws HblConfigError
 ```
 
-That last line is deliberate. `1.005` cannot be represented exactly in PKR, and quietly rounding it to `1.00` or `1.01` is a decision about someone's money that a library should not make on your behalf. Round it yourself, explicitly, and the ambiguity becomes visible in your code.
+That last line is deliberate. `1.005` cannot be represented exactly in NPR, and quietly rounding it to `1.00` or `1.01` is a decision about someone's money that a library should not make on your behalf. Round it yourself, explicitly, and the ambiguity becomes visible in your code.
 
 ---
 
@@ -443,7 +443,7 @@ So if a capture times out and you want to retry safely, reuse the ID:
 
 ```ts
 const transactionId = `capture-${orderId}-1`;   // derived from your data, stable across retries
-await hbl.transactions.capture(orderId, { amount, currency: 'PKR', transactionId });
+await hbl.transactions.capture(orderId, { amount, currency: 'NPR', transactionId });
 ```
 
 When you omit `transactionId`, the package generates a random one — correct for a first attempt, wrong for a retry.
@@ -504,7 +504,7 @@ Getters: `host`, `merchantId`, `checkoutJsUrl` — all browser-safe.
 
 ## Testing your integration
 
-HBL issues separate test credentials and a test host. Point `host` at it and use Mastercard's standard test cards — the last digits of the amount can be used to trigger specific gateway responses, which your HBL integration contact will confirm for your account.
+Himalayan Bank issues separate test credentials, and usually a separate test host. Point `host` at it and use Mastercard's standard test cards — on MPGS the trailing digits of the amount can be used to trigger specific gateway responses, which your HBL integration contact will confirm for your account.
 
 This package's own suite never touches a network. Inject a `fetch` to do the same in yours:
 
@@ -525,7 +525,7 @@ const hbl = new HblGateway({
 
 ## Troubleshooting
 
-**`401 Unauthorized`** — the username must be `merchant.<merchantId>`, which this package builds for you. Check that `merchantId` and `apiPassword` are the pair for the host you are calling: test credentials do not work against the production host.
+**`401 Unauthorized`** — the username must be `merchant.<merchantId>`, which this package builds for you. Check that `merchantId` and `apiPassword` are the pair for the host you are calling: test credentials do not work against the production host, and a merchant provisioned on one MPGS host will not authenticate against another.
 
 **`INVALID_REQUEST` on `order.amount`** — the amount does not match the currency's minor unit. `normalizeAmount` catches most of these before the request leaves.
 
@@ -554,7 +554,9 @@ npm test
 
 ## Disclaimer
 
-This is an unofficial, community-maintained package. It is not affiliated with, endorsed by, or supported by Habib Bank Limited or Mastercard. "HBL" and "Mastercard" are trademarks of their respective owners, used here only to describe what the package integrates with.
+This is an unofficial, community-maintained package. It is not affiliated with, endorsed by, or supported by Himalayan Bank Limited or Mastercard. "HBL", "Himalayan Bank" and "Mastercard" are trademarks of their respective owners, used here only to describe what the package integrates with.
+
+Note that several banks trade as "HBL". This package targets **Himalayan Bank Limited in Nepal**. It speaks standard MPGS v100, so it will work against any MPGS acquirer once you set `host` — but the defaults here are Himalayan Bank's.
 
 Verify behaviour against your own HBL test account before going live.
 

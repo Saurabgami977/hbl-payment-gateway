@@ -31,7 +31,7 @@ export class CheckoutResource {
    * const session = await hbl.checkout.initiate({
    *   orderId: 'ord_1024',
    *   amount: 1500,
-   *   currency: 'PKR',
+   *   currency: 'NPR',
    *   description: 'Starter plan — 1 month',
    *   returnUrl: 'https://example.com/checkout/result',
    * });

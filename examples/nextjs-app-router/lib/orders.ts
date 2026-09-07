@@ -19,7 +19,7 @@ export interface Order {
 
 const orders = new Map<string, Order>();
 
-export function createOrder(amount: number, currency = 'PKR'): Order {
+export function createOrder(amount: number, currency = 'NPR'): Order {
   const id = `ord_${Date.now()}`;
   const order: Order = {
     id,

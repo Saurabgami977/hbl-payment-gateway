@@ -77,7 +77,7 @@ export const capturedOrder = {
   result: 'SUCCESS',
   status: 'CAPTURED',
   amount: 1500.0,
-  currency: 'PKR',
+  currency: 'NPR',
   totalAuthorizedAmount: 1500.0,
   totalCapturedAmount: 1500.0,
   totalRefundedAmount: 0,
