@@ -6,6 +6,9 @@ coverage/
 .env
 .env.*
 !.env.example
+
+# Would hold an npm auth token if one were ever written here.
+.npmrc
 .idea/
 .vscode/
 *.tsbuildinfo
