@@ -52,6 +52,33 @@ integrators into PCI DSS scope, and the hosted flow exists precisely to avoid
 that. Tokenization and Hosted Session are open questions — raise an issue if
 you need them.
 
+## Releasing
+
+Maintainers only.
+
+1. Update the version in `package.json` and move the `## [Unreleased]` entries
+   in `CHANGELOG.md` under the new version heading.
+2. Commit, then tag: `git tag v0.1.1 && git push origin v0.1.1`.
+3. The release workflow runs the checks, verifies the tag matches
+   `package.json`, and publishes with a provenance attestation.
+
+This requires an npm **granular access token** with read/write on packages and
+**bypass 2FA** enabled, stored as the `NPM_TOKEN` repository secret.
+
+### Publishing by hand
+
+Only if CI is unavailable. npm accounts with 2FA on writes reject a plain
+`npm publish` with `403 Forbidden`:
+
+```bash
+npm publish --otp=123456                 # TOTP authenticator code
+NPM_CONFIG_TOKEN=npm_xxxxx npm publish   # or a bypass-2FA granular token
+```
+
+A local publish cannot generate provenance — that needs a CI provider with
+OIDC, which is why `--provenance` lives in the release workflow rather than in
+`publishConfig`.
+
 ## Reporting security issues
 
 Please do not open a public issue. See [SECURITY.md](./SECURITY.md).
